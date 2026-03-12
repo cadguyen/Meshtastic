@@ -167,28 +167,19 @@
 // Board feature/pin assignment defaults (override with -D as needed)
 // -----------------------------------------------------------------------------
 
-// Battery
-#ifndef BATTERY_PIN
-#define BATTERY_PIN GPIO_ALIAS_03
-#endif
-#ifndef ADC_MULTIPLIER
-#define ADC_MULTIPLIER 2.0
-#endif
-#ifndef ADC_CHANNEL
-#define ADC_CHANNEL ADC1_GPIO3_CHANNEL
-#endif
+// Battery (not specified in provided pin map)
 
-// Button
+// Button/BOOT
 #ifndef BUTTON_PIN
-#define BUTTON_PIN GPIO_ALIAS_39
+#define BUTTON_PIN GPIO_ALIAS_00
 #endif
 
 // I2C
 #ifndef I2C_SCL
-#define I2C_SCL GPIO_ALIAS_02
+#define I2C_SCL GPIO_ALIAS_10
 #endif
 #ifndef I2C_SDA
-#define I2C_SDA GPIO_ALIAS_42
+#define I2C_SDA GPIO_ALIAS_09
 #endif
 
 // Screen disabled by default
@@ -201,10 +192,22 @@
 #define HAS_GPS 1
 #endif
 #ifndef GPS_TX_PIN
-#define GPS_TX_PIN GPIO_ALIAS_43
+#define GPS_TX_PIN RADIOLIB_NC
 #endif
 #ifndef GPS_RX_PIN
-#define GPS_RX_PIN GPIO_ALIAS_44
+#define GPS_RX_PIN RADIOLIB_NC
+#endif
+#ifndef PIN_GPS_RESET
+#define PIN_GPS_RESET GPIO_ALIAS_01
+#endif
+#ifndef GPS_RESET_MODE
+#define GPS_RESET_MODE LOW
+#endif
+#ifndef PIN_GPS_STANDBY
+#define PIN_GPS_STANDBY GPIO_ALIAS_02
+#endif
+#ifndef PIN_GPS_PPS
+#define PIN_GPS_PPS GPIO_ALIAS_38
 #endif
 
 // LoRa module support
@@ -219,32 +222,52 @@
 #endif
 
 #ifndef SX126X_CS
-#define SX126X_CS GPIO_ALIAS_05
+#define SX126X_CS GPIO_ALIAS_04
 #endif
 #ifndef SX126X_SCK
-#define SX126X_SCK GPIO_ALIAS_06
+#define SX126X_SCK GPIO_ALIAS_05
 #endif
 #ifndef SX126X_MOSI
-#define SX126X_MOSI GPIO_ALIAS_13
+#define SX126X_MOSI GPIO_ALIAS_06
 #endif
 #ifndef SX126X_MISO
-#define SX126X_MISO GPIO_ALIAS_04
+#define SX126X_MISO GPIO_ALIAS_07
 #endif
 #ifndef SX126X_RESET
-#define SX126X_RESET GPIO_ALIAS_01
+#define SX126X_RESET GPIO_ALIAS_15
 #endif
 #ifndef SX126X_BUSY
-#define SX126X_BUSY GPIO_ALIAS_48
+#define SX126X_BUSY GPIO_ALIAS_16
 #endif
 #ifndef SX126X_DIO1
-#define SX126X_DIO1 GPIO_ALIAS_47
+#define SX126X_DIO1 GPIO_ALIAS_17
+#endif
+#ifndef LORA_DIO3
+#define LORA_DIO3 GPIO_ALIAS_08
 #endif
 
 #ifndef SX126X_TXEN
-#define SX126X_TXEN GPIO_ALIAS_10
+#define SX126X_TXEN GPIO_ALIAS_18
 #endif
 #ifndef SX126X_RXEN
-#define SX126X_RXEN GPIO_ALIAS_12
+#define SX126X_RXEN RADIOLIB_NC
+#endif
+
+// LEDs
+#ifndef LED_PIN
+#define LED_PIN GPIO_ALIAS_14
+#endif
+#ifndef Battery_LED_1
+#define Battery_LED_1 GPIO_ALIAS_14
+#endif
+#ifndef Battery_LED_2
+#define Battery_LED_2 GPIO_ALIAS_21
+#endif
+#ifndef Battery_LED_3
+#define Battery_LED_3 GPIO_ALIAS_47
+#endif
+#ifndef Battery_LED_4
+#define Battery_LED_4 GPIO_ALIAS_48
 #endif
 
 // Compatibility macros used across Meshtastic code

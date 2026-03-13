@@ -57,7 +57,7 @@ extern PCA9557 io;
 extern AudioThread *audioThread;
 #endif
 
-#ifdef HAS_UDP_MULTICAST
+#if HAS_UDP_MULTICAST
 #include "mesh/udp/UdpMulticastHandler.h"
 extern UdpMulticastHandler *udpHandler;
 #endif

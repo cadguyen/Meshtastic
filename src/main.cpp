@@ -142,7 +142,7 @@ ExtensionIOXL9555 io;
 extern void tftSetup(void);
 #endif
 
-#ifdef HAS_UDP_MULTICAST
+#if HAS_UDP_MULTICAST
 #include "mesh/udp/UdpMulticastHandler.h"
 UdpMulticastHandler *udpHandler = nullptr;
 #endif
@@ -880,7 +880,7 @@ void setup()
     audioThread = new AudioThread();
 #endif
 
-#ifdef HAS_UDP_MULTICAST
+#if HAS_UDP_MULTICAST
     LOG_DEBUG("Start multicast thread");
     udpHandler = new UdpMulticastHandler();
 #ifdef ARCH_PORTDUINO

@@ -248,14 +248,6 @@ for pref, value in userPrefs.items():
 current_date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 build_epoch = int(current_date.timestamp())
 
-flags = [
-    "-DAPP_VERSION=" + verObj["long"],
-    "-DAPP_VERSION_SHORT=" + verObj["short"],
-    "-DAPP_ENV=" + env.get("PIOENV"),
-    "-DAPP_REPO=" + repo_owner,
-    "-DBUILD_EPOCH=" + str(build_epoch),
-]
-
 system_defines = [
     ("APP_VERSION", verObj["long"]),
     ("APP_VERSION_SHORT", verObj["short"]),
@@ -264,12 +256,13 @@ system_defines = [
     ("BUILD_EPOCH", str(build_epoch)),
 ]
 
+flags = [f"-D{name}={value}" for name, value in system_defines]
+
 print("Using flags:")
 for flag in flags:
     print(flag)
 
 projenv.Append(
-    CCFLAGS=flags,
     CPPDEFINES=system_defines + pref_defines,
 )
 

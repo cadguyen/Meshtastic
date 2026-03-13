@@ -10,5 +10,8 @@
   },
   "[powershell]": {
     "editor.defaultFormatter": "ms-vscode.powershell"
-  }
+  },
+  "platformio-ide.projectConfigPath": "platformio.ini",
+  "platformio-ide.projectConfPath": "platformio.ini",
+  "platformio-ide.customProjectConf": "platformio.ini"
 }

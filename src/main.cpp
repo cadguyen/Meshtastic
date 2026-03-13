@@ -265,6 +265,12 @@ void lateInitVariant() {}
 void earlyInitVariant() __attribute__((weak));
 void earlyInitVariant() {}
 
+#if defined(LED_POWER)
+#define BOOT_STATUS_LED LED_POWER
+#elif defined(PIN_LED1)
+#define BOOT_STATUS_LED PIN_LED1
+#endif
+
 // NRF52 (and probably other platforms) can report when system is in power failure mode
 // (eg. too low battery voltage) and operating it is unsafe (data corruption, bootloops, etc).
 // For example NRF52 will prevent any flash writes in that case automatically
@@ -280,14 +286,14 @@ void waitUntilPowerLevelSafe()
 {
     while (powerHAL_isPowerLevelSafe() == false) {
 
-#ifdef LED_POWER
+#ifdef BOOT_STATUS_LED
 
         // 3x: blink for 300 ms, pause for 300 ms
 
         for (int i = 0; i < 3; i++) {
-            digitalWrite(LED_POWER, LED_STATE_ON);
+            digitalWrite(BOOT_STATUS_LED, LED_STATE_ON);
             delay(300);
-            digitalWrite(LED_POWER, LED_STATE_OFF);
+            digitalWrite(BOOT_STATUS_LED, LED_STATE_OFF);
             delay(300);
         }
 #endif
@@ -311,9 +317,9 @@ void setup()
     // initialize power HAL layer as early as possible
     powerHAL_init();
 
-#ifdef LED_POWER
-    pinMode(LED_POWER, OUTPUT);
-    digitalWrite(LED_POWER, LED_STATE_ON);
+#ifdef BOOT_STATUS_LED
+    pinMode(BOOT_STATUS_LED, OUTPUT);
+    digitalWrite(BOOT_STATUS_LED, LED_STATE_ON);
 #endif
 
     // prevent booting if device is in power failure mode

@@ -32,6 +32,17 @@ Meshtastic enables text messaging, location sharing, and telemetry over a decent
 - 🔧 **[Building Instructions](https://meshtastic.org/docs/development/firmware/build)** – Learn how to compile the firmware from source.
 - ⚡ **[Flashing Instructions](https://meshtastic.org/docs/getting-started/flashing-firmware/)** – Install or update the firmware on your device.
 
+### Common PlatformIO setup pitfalls
+
+If you see an error like `No section: 'esp32s3_base'`, you are usually trying to build a variant `platformio.ini`
+directly. Build from the repository root `platformio.ini` instead so shared base sections are loaded, for example:
+
+`platformio run -e esp32-s3-wroom-n16-gpio`
+
+If VS Code shows `Command 'PlatformIO: Build' resulted in an error` (for example `Cannot read properties of undefined (reading 'id')`),
+run **Terminal → Run Build Task** and choose **PlatformIO: Build (CLI fallback)**. This still builds with PlatformIO from VS Code,
+but uses the CLI task path as a safe fallback when the extension task state is corrupted.
+
 Join our community and help improve Meshtastic! 🚀
 
 ## Stats

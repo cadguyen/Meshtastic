@@ -5,11 +5,26 @@
       "type": "PlatformIO",
       "task": "Build",
       "problemMatcher": ["$platformio"],
+      "group": "build",
+      "label": "PlatformIO: Build (extension)"
+    },
+    {
+      "type": "shell",
+      "command": "platformio run -e ${input:pioEnv}",
+      "problemMatcher": ["$platformio"],
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "label": "PlatformIO: Build"
+      "label": "PlatformIO: Build (CLI fallback)"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "pioEnv",
+      "type": "promptString",
+      "description": "PlatformIO environment (example: esp32-s3-wroom-n16-gpio)",
+      "default": "tbeam"
     }
   ]
 }

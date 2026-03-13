@@ -219,20 +219,29 @@ with open(jsonLoc) as f:
     jsonStr = re.sub("//.*","", f.read(), flags=re.MULTILINE)
     userPrefs = json.loads(jsonStr)
 
-pref_flags = []
-# Pre-process the userPrefs
-for pref in userPrefs:
-    if userPrefs[pref].startswith("{"):
-        pref_flags.append("-D" + pref + "=" + userPrefs[pref])
-    elif userPrefs[pref].lstrip("-").replace(".", "").isdigit():
-        pref_flags.append("-D" + pref + "=" + userPrefs[pref])
-    elif userPrefs[pref] == "true" or userPrefs[pref] == "false":
-        pref_flags.append("-D" + pref + "=" + userPrefs[pref])
-    elif userPrefs[pref].startswith("meshtastic_"):
-        pref_flags.append("-D" + pref + "=" + userPrefs[pref])
-    # If the value is a string, we need to wrap it in quotes
+pref_defines = []
+
+
+def is_numeric_literal(value: str) -> bool:
+    return value.lstrip("-").replace(".", "", 1).isdigit()
+
+
+# Pre-process the userPrefs into CPPDEFINES tuples so values with spaces are preserved.
+for pref, value in userPrefs.items():
+    if not isinstance(value, str):
+        pref_defines.append((pref, value))
+        continue
+
+    if value.startswith("{"):
+        pref_defines.append((pref, value))
+    elif is_numeric_literal(value):
+        pref_defines.append((pref, value))
+    elif value in ("true", "false"):
+        pref_defines.append((pref, value))
+    elif value.startswith("meshtastic_"):
+        pref_defines.append((pref, value))
     else:
-        pref_flags.append("-D" + pref + "=" + env.StringifyMacro(userPrefs[pref]) + "")
+        pref_defines.append((pref, env.StringifyMacro(value)))
 
 # General options that are passed to the C and C++ compilers
 # Calculate unix epoch for current day (midnight)
@@ -240,12 +249,20 @@ current_date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 build_epoch = int(current_date.timestamp())
 
 flags = [
-        "-DAPP_VERSION=" + verObj["long"],
-        "-DAPP_VERSION_SHORT=" + verObj["short"],
-        "-DAPP_ENV=" + env.get("PIOENV"),
-        "-DAPP_REPO=" + repo_owner,
-        "-DBUILD_EPOCH=" + str(build_epoch),
-    ] + pref_flags
+    "-DAPP_VERSION=" + verObj["long"],
+    "-DAPP_VERSION_SHORT=" + verObj["short"],
+    "-DAPP_ENV=" + env.get("PIOENV"),
+    "-DAPP_REPO=" + repo_owner,
+    "-DBUILD_EPOCH=" + str(build_epoch),
+]
+
+system_defines = [
+    ("APP_VERSION", verObj["long"]),
+    ("APP_VERSION_SHORT", verObj["short"]),
+    ("APP_ENV", env.get("PIOENV")),
+    ("APP_REPO", repo_owner),
+    ("BUILD_EPOCH", str(build_epoch)),
+]
 
 print("Using flags:")
 for flag in flags:
@@ -253,6 +270,7 @@ for flag in flags:
 
 projenv.Append(
     CCFLAGS=flags,
+    CPPDEFINES=system_defines + pref_defines,
 )
 
 for lb in env.GetLibBuilders():
